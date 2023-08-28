@@ -13,6 +13,9 @@ repositories {
 }
 
 dependencies {
+	//Spring dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	//Swagger
@@ -20,11 +23,25 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+	//DB dependencies
+	runtimeOnly 'org.postgresql:postgresql'
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.9.0'
+
+	//JWT
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
+	//Mail dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation 'eu.codearte.catch-exception:catch-exception:2.0'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
