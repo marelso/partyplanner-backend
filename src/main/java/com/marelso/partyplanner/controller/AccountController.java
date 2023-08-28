@@ -14,13 +14,9 @@ import java.util.List;
 public class AccountController {
     private final AccountService service;
 
-    @GetMapping()
+    @GetMapping
     public List<Account> get() {
-        return this.service.findAll();
+        return service.findAll();
     }
 
-    @GetMapping("/{username}")
-    public Account get(@PathVariable String username) {
-        return this.service.loadUserByUsername(username);
-    }
 }

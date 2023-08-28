@@ -18,7 +18,7 @@ public class AccountService implements UserDetailsService {
         return this.repository.findAllByDeletedFalse();
     }
 
-    private Account findUser(String username) {
+    public Account findUser(String username) {
         return searchUsername(username)
                 .orElseThrow(() -> new RuntimeException("There is no account with id: ${id}"));
     }
