@@ -5,7 +5,6 @@ import com.marelso.partyplanner.service.AccountService;
 import com.marelso.partyplanner.service.EncryptionService;
 import com.marelso.partyplanner.service.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
