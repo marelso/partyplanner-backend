@@ -27,8 +27,11 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<?> auth(@RequestBody AuthRequest request) throws NoSuchAlgorithmException {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername()
-                        , EncryptionService.encrypt(request.getPassword())));
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        EncryptionService.encrypt(request.getPassword())
+                )
+        );
 
         var account = accountsService.loadUserByUsername(request.getUsername());
         var token = jwtService.generateToken(account);
