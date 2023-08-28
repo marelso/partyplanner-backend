@@ -1,4 +1,4 @@
-package com.marelso.partyplanner;
+package com.marelso.partyplanner.filter;
 
 import com.marelso.partyplanner.service.AccountService;
 import com.marelso.partyplanner.service.JwtService;

@@ -1,5 +1,6 @@
-package com.marelso.partyplanner;
+package com.marelso.partyplanner.config;
 
+import com.marelso.partyplanner.filter.JwtRequestFilter;
 import com.marelso.partyplanner.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

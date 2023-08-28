@@ -1,4 +1,4 @@
-package com.marelso.partyplanner;
+package com.marelso.partyplanner.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
