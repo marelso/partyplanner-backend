@@ -4,6 +4,7 @@ import com.marelso.partyplanner.domain.AuthRequest;
 import com.marelso.partyplanner.service.AccountService;
 import com.marelso.partyplanner.service.EncryptionService;
 import com.marelso.partyplanner.service.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,14 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.NoSuchAlgorithmException;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    @Autowired
-    private AccountService accountsService;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AccountService accountsService;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping
     public ResponseEntity<?> auth(@RequestBody AuthRequest request) throws NoSuchAlgorithmException {
