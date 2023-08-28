@@ -17,7 +17,7 @@ public class AccountController {
     private final AccountService service;
 
     @GetMapping
-    public List<Account> get(@RequestParam(required = false) Boolean active) {
+    public List<Account> get(@RequestParam(required = false, defaultValue = "true") Boolean active) {
         return service.findAll(active);
     }
 }
