@@ -33,6 +33,7 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             // -- Auth Request
+            "/accounts/**",
             "/auth/**",
     };
 

@@ -4,19 +4,20 @@ import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("accounts")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/accounts")
 public class AccountController {
     private final AccountService service;
 
     @GetMapping
-    public List<Account> get() {
-        return service.findAll();
+    public List<Account> get(@RequestParam(required = false) Boolean active) {
+        return service.findAll(active);
     }
-
 }

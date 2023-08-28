@@ -14,8 +14,9 @@ import java.util.Optional;
 public class AccountService implements UserDetailsService {
     private final AccountRepository repository;
 
-    public List<Account> findAll() {
-        return this.repository.findAllByDeletedFalse();
+    public List<Account> findAll(Boolean active) {
+        return active ? this.repository.findAllByDeletedFalse()
+                : this.repository.findAll();
     }
 
     public Account findUser(String username) {
