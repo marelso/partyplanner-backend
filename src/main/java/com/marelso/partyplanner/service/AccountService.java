@@ -38,17 +38,17 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account create(CreateAccountDto request) throws NoSuchAlgorithmException {
-        if(!isCredentialsAvailable(request.getUsername(), request.getEmail()))
+        if(isCredentialsInUse(request.getUsername(), request.getEmail()))
             throw new RuntimeException("Credentials already in use.");
 
         return this.repository.save(factory.from(request));
     }
 
-    private Boolean isCredentialsAvailable(String username, String email) {
-        var isUsernameAvailable = this.repository.existsByUsername(username);
-        var isEmailAvailable = this.repository.existsByEmail(email);
+    private Boolean isCredentialsInUse(String username, String email) {
+        var isUsernameInUse = this.repository.existsByUsername(username);
+        var isEmailInUse = this.repository.existsByEmail(email);
 
-        return isUsernameAvailable && isEmailAvailable;
+        return isUsernameInUse && isEmailInUse;
     }
 
 }

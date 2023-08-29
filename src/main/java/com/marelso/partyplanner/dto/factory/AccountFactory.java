@@ -19,6 +19,8 @@ public class AccountFactory {
         account.setName(dto.getName());
         account.setLastName(dto.getLastName());
         account.setPassword(EncryptionService.encrypt(dto.getPassword()));
+        account.setPermissionType(PermissionType.USER);
+        account.setDeleted(false);
 
         return account;
     }
@@ -33,6 +35,7 @@ public class AccountFactory {
         dto.setLastName(entity.getLastName());
         dto.setBio(entity.getBio());
         dto.setProfilePicture(entity.getProfilePicture());
+        dto.setPermissionType(entity.getPermissionType());
         dto.setActive(!entity.isDeleted());
 
         return dto;

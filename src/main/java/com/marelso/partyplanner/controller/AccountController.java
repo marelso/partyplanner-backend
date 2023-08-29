@@ -20,7 +20,7 @@ public class AccountController {
 
     @GetMapping
     public List<Account> get(@RequestParam(required = false, defaultValue = "true") Boolean active) {
-        return service.findAll(active);
+        return factory.from(service.findAll(active));
     }
 
     @PostMapping
