@@ -6,7 +6,8 @@ import static java.util.Collections.emptyList;
 import static java.util.List.of;
 
 public enum PermissionType {
-    SUPER("SUPER", of("NONE", "USER", "SUPER")),
+    SUPER("SUPER", of("NONE", "USER", "MANAGER", "SUPER")),
+    MANAGER("MANAGER", of("NONE", "USER", "MANAGER")),
     USER("USER", of("NONE", "USER")),
     NONE("NONE", emptyList());
 

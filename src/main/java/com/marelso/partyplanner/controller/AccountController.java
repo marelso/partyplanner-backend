@@ -1,10 +1,12 @@
 package com.marelso.partyplanner.controller;
 
 import com.marelso.partyplanner.domain.Account;
+import com.marelso.partyplanner.domain.PermissionType;
 import com.marelso.partyplanner.dto.AccountDto;
 import com.marelso.partyplanner.dto.CreateAccountDto;
 import com.marelso.partyplanner.dto.factory.AccountFactory;
 import com.marelso.partyplanner.service.AccountService;
+import com.marelso.partyplanner.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +19,14 @@ import java.util.List;
 public class AccountController {
     private final AccountService service;
     private final AccountFactory factory;
+    private final AuthService authService;
 
     @GetMapping
-    public List<AccountDto> get(@RequestParam(required = false, defaultValue = "false") Boolean includeDeleted) {
+    public List<AccountDto> get(
+            @RequestHeader("Authorization") String token,
+            @RequestParam(required = false, defaultValue = "false") Boolean includeDeleted
+    ) {
+        authService.authorize(token, PermissionType.MANAGER);
         return factory.from(service.findAll(includeDeleted));
     }
 
