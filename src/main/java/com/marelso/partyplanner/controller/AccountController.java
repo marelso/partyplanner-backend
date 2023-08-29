@@ -35,6 +35,13 @@ public class AccountController {
         return factory.from(service.create(request));
     }
 
+    @PutMapping("/{id}")
+    public AccountDto put(
+            @PathVariable Integer id,
+            @RequestBody AccountDto request) {
+        return this.factory.from(this.service.update(id, request));
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
         this.service.delete(id);

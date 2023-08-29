@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -46,5 +47,17 @@ public class AccountFactory {
         dto.setActive(!entity.isDeleted());
 
         return dto;
+    }
+
+    public Account from(Account account, AccountDto request) {
+
+        account.setUsername(request.getUsername());
+        account.setEmail(request.getEmail());
+        account.setName(request.getName());
+        account.setLastName(request.getLastName());
+        account.setBio(request.getBio());
+        account.setProfilePicture(request.getProfilePicture());
+
+        return account;
     }
 }

@@ -1,6 +1,7 @@
 package com.marelso.partyplanner.service;
 
 import com.marelso.partyplanner.domain.Account;
+import com.marelso.partyplanner.dto.AccountDto;
 import com.marelso.partyplanner.dto.CreateAccountDto;
 import com.marelso.partyplanner.dto.factory.AccountFactory;
 import com.marelso.partyplanner.repository.AccountRepository;
@@ -55,5 +56,14 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public void delete(Integer id) {
         this.repository.applySoftDelete(id);
+    }
+
+    public Account update(Integer id, AccountDto request) {
+        var thereIsAnyAccount = this.repository.findById(id);
+        if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
+
+        var account = factory.from(thereIsAnyAccount.get(), request);
+
+        return repository.save(account);
     }
 }
