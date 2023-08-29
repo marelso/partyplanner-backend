@@ -24,6 +24,7 @@ public class Account implements UserDetails {
     private String password;
     private String name;
     private String lastName;
+    private String bio;
     private String profilePicture;
     private PermissionType permissionType;
     private boolean deleted;
