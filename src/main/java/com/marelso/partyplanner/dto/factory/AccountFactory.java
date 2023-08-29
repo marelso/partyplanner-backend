@@ -8,9 +8,16 @@ import com.marelso.partyplanner.service.EncryptionService;
 import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AccountFactory {
+    public List<AccountDto> from(List<Account> accounts) {
+        return accounts.stream().map(this::from)
+                .collect(Collectors.toList());
+    }
+
     public Account from(CreateAccountDto dto) throws NoSuchAlgorithmException {
         var account = new Account();
 
