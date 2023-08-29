@@ -12,6 +12,7 @@ public class AccountDto {
     private String email;
     private String name;
     private String lastName;
+    private String bio;
     private String profilePicture;
     private PermissionType permissionType;
     private Boolean active;
