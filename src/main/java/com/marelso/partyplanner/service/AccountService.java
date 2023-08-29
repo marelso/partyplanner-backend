@@ -7,6 +7,7 @@ import com.marelso.partyplanner.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -51,4 +52,8 @@ public class AccountService implements UserDetailsService {
         return isUsernameInUse && isEmailInUse;
     }
 
+    @Transactional
+    public void delete(Integer id) {
+        this.repository.applySoftDelete(id);
+    }
 }

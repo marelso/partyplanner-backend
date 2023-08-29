@@ -27,4 +27,9 @@ public class AccountController {
     public AccountDto post(@RequestBody CreateAccountDto request) throws NoSuchAlgorithmException {
         return factory.from(service.create(request));
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id) {
+        this.service.delete(id);
+    }
 }
