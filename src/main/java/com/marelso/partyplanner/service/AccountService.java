@@ -18,14 +18,14 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository repository;
     private final AccountFactory factory;
 
-    public List<Account> findAll(Boolean active) {
-        return active ? this.repository.findAllByDeletedFalse()
-                : this.repository.findAll();
+    public List<Account> findAll(Boolean includeDeleted) {
+        return includeDeleted ? this.repository.findAll()
+                : this.repository.findAllByDeletedFalse();
     }
 
     public Account findUser(String username) {
         return searchUsername(username)
-                .orElseThrow(() -> new RuntimeException("There is no account with id: ${id}"));
+                .orElseThrow(() -> new RuntimeException("Nothing found here."));
     }
 
     private Optional<Account> searchUsername(String username) {
