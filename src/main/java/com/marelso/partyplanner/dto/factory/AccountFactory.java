@@ -52,8 +52,6 @@ public class AccountFactory {
 
     public Account from(Account account, AccountPropertiesDto request) {
 
-        account.setUsername(request.getUsername());
-        account.setEmail(request.getEmail());
         account.setName(request.getName());
         account.setLastName(request.getLastName());
         account.setBio(request.getBio());
