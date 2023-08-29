@@ -31,6 +31,7 @@ public class AccountFactory {
         dto.setEmail(entity.getEmail());
         dto.setName(entity.getName());
         dto.setLastName(entity.getLastName());
+        dto.setBio(entity.getBio());
         dto.setProfilePicture(entity.getProfilePicture());
         dto.setActive(!entity.isDeleted());
 
