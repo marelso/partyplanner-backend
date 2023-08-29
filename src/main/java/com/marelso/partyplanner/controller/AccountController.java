@@ -19,7 +19,7 @@ public class AccountController {
     private final AccountFactory factory;
 
     @GetMapping
-    public List<AccountDto> get(@RequestParam(required = false, defaultValue = "true") Boolean includeDeleted) {
+    public List<AccountDto> get(@RequestParam(required = false, defaultValue = "false") Boolean includeDeleted) {
         return factory.from(service.findAll(includeDeleted));
     }
 
