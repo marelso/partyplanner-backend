@@ -3,6 +3,7 @@ package com.marelso.partyplanner.dto.factory;
 import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.PermissionType;
 import com.marelso.partyplanner.dto.AccountDto;
+import com.marelso.partyplanner.dto.AccountPropertiesDto;
 import com.marelso.partyplanner.dto.CreateAccountDto;
 import com.marelso.partyplanner.service.EncryptionService;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class AccountFactory {
         return dto;
     }
 
-    public Account from(Account account, AccountDto request) {
+    public Account from(Account account, AccountPropertiesDto request) {
 
         account.setUsername(request.getUsername());
         account.setEmail(request.getEmail());

@@ -1,8 +1,8 @@
 package com.marelso.partyplanner.controller;
 
-import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.PermissionType;
 import com.marelso.partyplanner.dto.AccountDto;
+import com.marelso.partyplanner.dto.AccountPropertiesDto;
 import com.marelso.partyplanner.dto.CreateAccountDto;
 import com.marelso.partyplanner.dto.factory.AccountFactory;
 import com.marelso.partyplanner.service.AccountService;
@@ -38,7 +38,7 @@ public class AccountController {
     @PutMapping("/{id}")
     public AccountDto put(
             @PathVariable Integer id,
-            @RequestBody AccountDto request) {
+            @RequestBody AccountPropertiesDto request) {
         return this.factory.from(this.service.update(id, request));
     }
 
