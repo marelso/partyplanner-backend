@@ -27,6 +27,9 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.9.0'
 
+	//S3
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.470'
+
 	//JWT
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
