@@ -1,7 +1,7 @@
 package com.marelso.partyplanner.domain;
 
 public enum Recurrence {
-    ONETIME("One-time party"),
+    ONETIME("One-time"),
     WEEKLY("Weekly"),
     MONTHLY("Monthly"),
     YEARLY("Yearly");
