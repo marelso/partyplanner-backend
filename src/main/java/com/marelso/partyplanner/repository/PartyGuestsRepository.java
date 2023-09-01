@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface PartyGuestsRepository extends JpaRepository<PartyGuest, Integer> {
     List<PartyGuest> findAllByPartyId(Integer partyId);
 
-    @Query(value = "select * from party_guests guest" + " where guest.account_id = :accountId and guest.party_id = :partyId", nativeQuery = true)
-    Optional<PartyGuest> findByPartyAndAccountId(@Param("accountId") Integer accountId, @Param("partyId") Integer partyId);
+    @Query(value = "select * from party_guests guest where guest.account_id = :accountId and guest.party_id = :partyId", nativeQuery = true)
+    Optional<PartyGuest> findByPartyIdAndAccountId(@Param("accountId") Integer accountId, @Param("partyId") Integer partyId);
 }

@@ -14,7 +14,7 @@ public class PartyGuestsService {
     private final PartyGuestsRepository repository;
 
     public void inviteUserToParty(Integer account, Integer party) {
-        var isUserAlreadyInvited = repository.findByPartyAndAccountId(account, party);
+        var isUserAlreadyInvited = repository.findByPartyIdAndAccountId(account, party);
 
         if(isUserAlreadyInvited.isEmpty()) {
             var guest = new PartyGuest();
@@ -27,7 +27,7 @@ public class PartyGuestsService {
     }
 
     public void unInviteUserFromParty(Integer account, Integer party) {
-        repository.findByPartyAndAccountId(account, party).ifPresent(repository::delete);
+        repository.findByPartyIdAndAccountId(account, party).ifPresent(repository::delete);
     }
 
     public List<Integer> findGuestsByPartyId(Integer id) {
