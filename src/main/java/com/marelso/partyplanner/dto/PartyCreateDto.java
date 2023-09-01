@@ -11,7 +11,6 @@ import java.time.OffsetDateTime;
 public class PartyCreateDto {
     private String name;
     private String description;
-    private String createdBy;
     private Recurrence recurrence;
     private OffsetDateTime start;
     private OffsetDateTime end;
