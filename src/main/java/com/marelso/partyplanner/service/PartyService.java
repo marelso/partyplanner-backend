@@ -23,6 +23,12 @@ public class PartyService {
         return factory.from(this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId()), account.getUsername());
     }
 
+    public List<PartyDto> upcoming(String username) {
+        var account = accountService.findUser(username);
+
+        return factory.from(this.repository.upcomingParties(account.getId()), account.getUsername());
+    }
+
     public PartyDto create(PartyCreateDto request, String username) {
         validateRequest(request);
 
