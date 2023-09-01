@@ -24,6 +24,13 @@ public class PartyController {
         return service.list(username);
     }
 
+    @GetMapping("/upcoming")
+    public List<PartyDto> upcoming(@RequestHeader("Authorization") String token) {
+        var username = authService.authorize(token, PermissionType.USER);
+
+        return service.upcoming(username);
+    }
+
     @PostMapping
     public PartyDto create(@RequestHeader("Authorization") String token, @RequestBody PartyCreateDto request) {
         var username = authService.authorize(token, PermissionType.USER);
