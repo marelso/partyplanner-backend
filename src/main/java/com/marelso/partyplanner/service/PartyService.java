@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PartyService {
     private final AccountService accountService;
+    private final PartyGuestsService guestService;
     private final PartyRepository repository;
     private final PartyFactory factory;
 
@@ -38,8 +39,11 @@ public class PartyService {
         areDatesValid(request.getStart(), request.getEnd());
 
         var account = accountService.findUser(username);
-        var guests = accountService.validateUsernames(request.getGuests());
         var party = repository.save(factory.from(request, account.getId()));
+        var guests = accountService.validateUsernames(request.getGuests());
+
+        if(!guests.isEmpty())
+            guests.forEach(guest -> guestService.inviteUserToParty(guest.getId(), party.getId()));
 
         return factory.from(party, account.getUsername());
     }
