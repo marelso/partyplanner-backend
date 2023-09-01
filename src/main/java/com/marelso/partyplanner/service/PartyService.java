@@ -1,5 +1,6 @@
 package com.marelso.partyplanner.service;
 
+import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
@@ -65,13 +66,25 @@ public class PartyService {
         var account = accountService.findUser(username);
         var party = findPartyById(reference);
 
-        if(!account.getId().equals(party.getAccountId()))
-            throw new RuntimeException("You cannot update this party");
+        accountCanApplyChanges(account, party);
 
         party = this.repository.save(factory.from(party, request));
         var guestNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
 
         return factory.from(party, username, guestNames);
+    }
+
+    public PartyDto invite(String invite, Integer id, String username) {
+        var account = accountService.findUser(username);
+        var guest = accountService.findUser(invite);
+        var party = findPartyById(id);
+
+        accountCanApplyChanges(account, party);
+        guestService.inviteUserToParty(guest.getId(), party.getId());
+
+        var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+
+        return factory.from(party, account.getUsername(), usernames);
     }
 
     private Party findPartyById(Integer id) {
@@ -86,5 +99,9 @@ public class PartyService {
     private void areDatesValid(OffsetDateTime start, OffsetDateTime end) {
         if(start.isAfter(end))
             throw new RuntimeException("Invalid dates");
+    }
+    private void accountCanApplyChanges(Account account, Party party) {
+        if(!account.getId().equals(party.getAccountId()))
+            throw new RuntimeException("You cannot update this party");
     }
 }
