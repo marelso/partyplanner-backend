@@ -7,6 +7,7 @@ import com.marelso.partyplanner.repository.PartyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -23,9 +24,20 @@ public class PartyService {
     }
 
     public PartyDto create(PartyCreateDto request, String username) {
+        validateRequest(request);
+
         var account = accountService.findUser(username);
         var party = repository.save(factory.from(request, account.getId()));
 
         return factory.from(party, account.getUsername());
+    }
+
+    private void validateRequest(PartyCreateDto request) {
+        areDatesValid(request.getStart(), request.getEnd());
+    }
+
+    private void areDatesValid(OffsetDateTime start, OffsetDateTime end) {
+        if(start.isAfter(end))
+            throw new RuntimeException("Invalid dates");
     }
 }
