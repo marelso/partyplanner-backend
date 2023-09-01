@@ -19,7 +19,7 @@ public class PartyService {
     public List<PartyDto> list(String username) {
         var account = accountService.findUser(username);
 
-        return factory.from(this.repository.findAllByAccountId(account.getId()), account.getUsername());
+        return factory.from(this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId()), account.getUsername());
     }
 
     public PartyDto create(PartyCreateDto request, String username) {
