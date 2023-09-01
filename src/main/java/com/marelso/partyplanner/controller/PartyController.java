@@ -62,10 +62,10 @@ public class PartyController {
     @PutMapping("/{id}")
     public PartyDto put(
             @RequestHeader("Authorization") String token,
-            @PathVariable Integer reference,
+            @PathVariable Integer id,
             @RequestBody PartyUpdateDto request) {
         var username = authService.authorize(token, PermissionType.USER);
 
-        return service.update(reference, request, username);
+        return service.update(id, request, username);
     }
 }
