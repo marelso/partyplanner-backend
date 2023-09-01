@@ -39,6 +39,16 @@ public class PartyController {
         return service.create(request, username);
     }
 
+    @PostMapping("/{id}/invite")
+    public PartyDto post(
+            @RequestHeader("Authorization") String token,
+            @RequestParam String username,
+            @PathVariable Integer id) {
+        var account = authService.authorize(token, PermissionType.USER);
+
+        return service.invite(username, id, account);
+    }
+
     @PutMapping
     public PartyDto put(
             @RequestHeader("Authorization") String token,
