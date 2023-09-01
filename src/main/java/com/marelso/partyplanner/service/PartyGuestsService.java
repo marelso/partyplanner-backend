@@ -14,12 +14,16 @@ public class PartyGuestsService {
     private final PartyGuestsRepository repository;
 
     public void inviteUserToParty(Integer account, Integer party) {
-        var guest = new PartyGuest();
+        var isUserAlreadyInvited = repository.findByPartyAndAccountId(account, party);
 
-        guest.setPartyId(party);
-        guest.setAccountId(account);
+        if(isUserAlreadyInvited.isEmpty()) {
+            var guest = new PartyGuest();
 
-        repository.save(guest);
+            guest.setPartyId(party);
+            guest.setAccountId(account);
+
+            repository.save(guest);
+        }
     }
 
     public void unInviteUserFromParty(Integer account, Integer party) {
