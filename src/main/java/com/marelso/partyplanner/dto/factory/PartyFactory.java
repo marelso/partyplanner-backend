@@ -1,6 +1,5 @@
 package com.marelso.partyplanner.dto.factory;
 
-import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
@@ -25,7 +24,7 @@ public class PartyFactory {
         return entity;
     }
 
-    public PartyDto from(Party entity, String username) {
+    public PartyDto from(Party entity, String username, List<String> guests) {
         var dto = new PartyDto();
 
         dto.setReference(entity.getId());
@@ -35,12 +34,13 @@ public class PartyFactory {
         dto.setCreatedBy(username);
         dto.setStart(entity.getStartDate());
         dto.setEnd(entity.getEndDate());
+        dto.setGuests(guests);
 
         return dto;
     }
 
-    public List<PartyDto> from(List<Party> parties, String username) {
-        return parties.stream().map(party -> from(party, username)).collect(Collectors.toList());
+    public List<PartyDto> from(List<Party> parties, String username, List<String> guests) {
+        return parties.stream().map(party -> from(party, username, guests)).collect(Collectors.toList());
     }
 
     public Party from(Party party, PartyUpdateDto request) {
