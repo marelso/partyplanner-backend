@@ -18,6 +18,6 @@ public class Party {
     private String description;
     private Recurrence recurrence;
     private String bannerURL;
-    private OffsetDateTime start;
-    private OffsetDateTime end;
+    private OffsetDateTime startDate;
+    private OffsetDateTime endDate;
 }
