@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +24,24 @@ public class PartyService {
 
     public List<PartyDto> list(String username) {
         var account = accountService.findUser(username);
+        var parties = this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId());
 
-        return factory.from(this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId()), account.getUsername());
+        return parties.stream().map(party ->  {
+                    var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+                    return factory.from(party, account.getUsername(), usernames);
+                }
+        ).collect(Collectors.toList());
     }
 
     public List<PartyDto> upcoming(String username) {
         var account = accountService.findUser(username);
+        var parties = this.repository.upcomingParties(account.getId());
 
-        return factory.from(this.repository.upcomingParties(account.getId()), account.getUsername());
+        return parties.stream().map(party ->  {
+                    var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+                    return factory.from(party, account.getUsername(), usernames);
+                }
+        ).collect(Collectors.toList());
     }
 
     public PartyDto create(PartyCreateDto request, String username) {
@@ -43,7 +54,9 @@ public class PartyService {
         if(!guests.isEmpty())
             guests.forEach(guest -> guestService.inviteUserToParty(guest.getId(), party.getId()));
 
-        return factory.from(party, account.getUsername());
+        var guestsNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+
+        return factory.from(party, account.getUsername(), guestsNames);
     }
 
     public PartyDto update(Integer reference, PartyUpdateDto request, String username) {
@@ -56,8 +69,9 @@ public class PartyService {
             throw new RuntimeException("You cannot update this party");
 
         party = this.repository.save(factory.from(party, request));
+        var guestNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
 
-        return factory.from(party, username);
+        return factory.from(party, username, guestNames);
     }
 
     private Party findPartyById(Integer id) {
