@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 public class PartyDto {
+    private Integer reference;
     private String name;
     private String description;
     private String createdBy;
