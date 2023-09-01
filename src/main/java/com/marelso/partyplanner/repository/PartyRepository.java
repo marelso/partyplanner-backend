@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PartyRepository extends JpaRepository<Party, Integer> {
-    List<Party> findAllByCreatedBy_IdOrderByStartDesc(Integer accountId);
+    List<Party> findAllByAccountId(Integer accountId);
 }
