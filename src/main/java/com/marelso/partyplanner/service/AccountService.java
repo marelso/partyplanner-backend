@@ -54,17 +54,19 @@ public class AccountService implements UserDetailsService {
         return isUsernameInUse && isEmailInUse;
     }
 
-    @Transactional
-    public void delete(Integer id) {
-        this.repository.applySoftDelete(id);
-    }
-
     public Account update(Integer id, AccountPropertiesDto request) {
         var thereIsAnyAccount = this.repository.findById(id);
         if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
 
-        var account = factory.from(thereIsAnyAccount.get(), request);
+        //TODO create s3service and handle profile image changes (upload/delete)
+        var pp = "";
+        var account = factory.from(thereIsAnyAccount.get(), request, pp);
 
         return repository.save(account);
+    }
+
+    @Transactional
+    public void delete(Integer id) {
+        this.repository.applySoftDelete(id);
     }
 }

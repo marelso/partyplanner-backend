@@ -50,12 +50,13 @@ public class AccountFactory {
         return dto;
     }
 
-    public Account from(Account account, AccountPropertiesDto request) {
-
+    public Account from(Account account, AccountPropertiesDto request, String profilePicture) {
         account.setName(request.getName());
         account.setLastName(request.getLastName());
         account.setBio(request.getBio());
-        account.setProfilePicture(request.getProfilePicture());
+
+        if(profilePicture != null)
+            account.setProfilePicture(profilePicture);
 
         return account;
     }
