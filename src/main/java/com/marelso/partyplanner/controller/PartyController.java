@@ -3,6 +3,7 @@ package com.marelso.partyplanner.controller;
 import com.marelso.partyplanner.domain.PermissionType;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
+import com.marelso.partyplanner.dto.PartyUpdateDto;
 import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.PartyService;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,15 @@ public class PartyController {
         var username = authService.authorize(token, PermissionType.USER);
 
         return service.create(request, username);
+    }
+
+    @PutMapping
+    public PartyDto put(
+            @RequestHeader("Authorization") String token,
+            @RequestParam Integer reference,
+            @RequestBody PartyUpdateDto request) {
+        var username = authService.authorize(token, PermissionType.USER);
+
+        return service.update(reference, request, username);
     }
 }
