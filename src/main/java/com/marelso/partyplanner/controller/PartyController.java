@@ -59,10 +59,10 @@ public class PartyController {
         return service.unInvite(username, id, account);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public PartyDto put(
             @RequestHeader("Authorization") String token,
-            @RequestParam Integer reference,
+            @PathVariable Integer reference,
             @RequestBody PartyUpdateDto request) {
         var username = authService.authorize(token, PermissionType.USER);
 
