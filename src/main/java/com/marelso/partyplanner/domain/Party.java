@@ -13,6 +13,7 @@ public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private Integer accountId;
     private String name;
     private String description;
     private Recurrence recurrence;
