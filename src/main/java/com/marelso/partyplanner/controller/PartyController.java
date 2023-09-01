@@ -3,11 +3,12 @@ package com.marelso.partyplanner.controller;
 import com.marelso.partyplanner.domain.PermissionType;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
-import com.marelso.partyplanner.dto.factory.PartyFactory;
 import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.PartyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,12 +16,18 @@ import org.springframework.web.bind.annotation.*;
 public class PartyController {
     private final AuthService authService;
     private final PartyService service;
-    private final PartyFactory factory;
+
+    @GetMapping
+    public List<PartyDto> get(@RequestHeader("Authorization") String token) {
+        var username = authService.authorize(token, PermissionType.USER);
+
+        return service.list(username);
+    }
 
     @PostMapping
     public PartyDto create(@RequestHeader("Authorization") String token, @RequestBody PartyCreateDto request) {
-        authService.authorize(token, PermissionType.USER);
+        var username = authService.authorize(token, PermissionType.USER);
 
-        return factory.from(service.create(request));
+        return service.create(request, username);
     }
 }
