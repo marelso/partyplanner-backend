@@ -18,8 +18,8 @@ public class PartyFactory {
         entity.setDescription(dto.getDescription());
         entity.setRecurrence(dto.getRecurrence());
         entity.setAccountId(accountId);
-        entity.setStart(dto.getStart());
-        entity.setEnd(dto.getEnd());
+        entity.setStartDate(dto.getStart());
+        entity.setEndDate(dto.getEnd());
 
         return entity;
     }
@@ -31,8 +31,8 @@ public class PartyFactory {
         dto.setDescription(entity.getDescription());
         dto.setRecurrence(entity.getRecurrence());
         dto.setCreatedBy(username);
-        dto.setStart(entity.getStart());
-        dto.setEnd(entity.getEnd());
+        dto.setStart(entity.getStartDate());
+        dto.setEnd(entity.getEndDate());
 
         return dto;
     }
