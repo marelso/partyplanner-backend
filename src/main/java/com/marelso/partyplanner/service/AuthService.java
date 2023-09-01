@@ -11,10 +11,12 @@ public class AuthService {
     private final AccountService accountsService;
     private final JwtService jwtService;
 
-    public void authorize(String token, PermissionType permission) {
-        if(!getUser(token).getPermissionType().hasPermission(permission)) {
+    public String authorize(String token, PermissionType permission) {
+        var account = getUser(token);
+        if(!account.getPermissionType().hasPermission(permission))
             throw new RuntimeException("Feature not allowed for this user.");
-        }
+
+        return account.getUsername();
     }
 
     private Account getUser(String token) {
