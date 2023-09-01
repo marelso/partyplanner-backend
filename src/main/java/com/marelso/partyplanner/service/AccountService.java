@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,14 @@ public class AccountService implements UserDetailsService {
     public Account findUser(String username) {
         return searchUsername(username)
                 .orElseThrow(() -> new RuntimeException("Nothing found here."));
+    }
+
+    public List<Account> validateUsernames(List<String> guests) {
+        return guests.stream()
+                .map(this::searchUsername)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 
     private Optional<Account> searchUsername(String username) {

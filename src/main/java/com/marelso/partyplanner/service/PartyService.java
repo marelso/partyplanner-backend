@@ -1,5 +1,6 @@
 package com.marelso.partyplanner.service;
 
+import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class PartyService {
         areDatesValid(request.getStart(), request.getEnd());
 
         var account = accountService.findUser(username);
+        var guests = accountService.validateUsernames(request.getGuests());
         var party = repository.save(factory.from(request, account.getId()));
 
         return factory.from(party, account.getUsername());
