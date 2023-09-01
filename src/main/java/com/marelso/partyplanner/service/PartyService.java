@@ -87,6 +87,19 @@ public class PartyService {
         return factory.from(party, account.getUsername(), usernames);
     }
 
+    public PartyDto unInvite(String invite, Integer id, String username) {
+        var account = accountService.findUser(username);
+        var guest = accountService.findUser(invite);
+        var party = findPartyById(id);
+
+        accountCanApplyChanges(account, party);
+        guestService.unInviteUserFromParty(guest.getId(), party.getId());
+
+        var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+
+        return factory.from(party, account.getUsername(), usernames);
+    }
+
     private Party findPartyById(Integer id) {
         return searchById(id)
                 .orElseThrow(() -> new RuntimeException("Nothing found here."));
