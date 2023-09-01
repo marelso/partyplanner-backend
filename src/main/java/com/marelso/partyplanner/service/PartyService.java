@@ -1,5 +1,6 @@
 package com.marelso.partyplanner.service;
 
+import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
@@ -12,24 +13,36 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PartyService {
     private final AccountService accountService;
+    private final PartyGuestsService guestService;
     private final PartyRepository repository;
     private final PartyFactory factory;
 
     public List<PartyDto> list(String username) {
         var account = accountService.findUser(username);
+        var parties = this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId());
 
-        return factory.from(this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId()), account.getUsername());
+        return parties.stream().map(party ->  {
+                    var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+                    return factory.from(party, account.getUsername(), usernames);
+                }
+        ).collect(Collectors.toList());
     }
 
     public List<PartyDto> upcoming(String username) {
         var account = accountService.findUser(username);
+        var parties = this.repository.upcomingParties(account.getId());
 
-        return factory.from(this.repository.upcomingParties(account.getId()), account.getUsername());
+        return parties.stream().map(party ->  {
+                    var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+                    return factory.from(party, account.getUsername(), usernames);
+                }
+        ).collect(Collectors.toList());
     }
 
     public PartyDto create(PartyCreateDto request, String username) {
@@ -37,8 +50,14 @@ public class PartyService {
 
         var account = accountService.findUser(username);
         var party = repository.save(factory.from(request, account.getId()));
+        var guests = accountService.validateUsernames(request.getGuests());
 
-        return factory.from(party, account.getUsername());
+        if(!guests.isEmpty())
+            guests.forEach(guest -> guestService.inviteUserToParty(guest.getId(), party.getId()));
+
+        var guestsNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+
+        return factory.from(party, account.getUsername(), guestsNames);
     }
 
     public PartyDto update(Integer reference, PartyUpdateDto request, String username) {
@@ -47,12 +66,38 @@ public class PartyService {
         var account = accountService.findUser(username);
         var party = findPartyById(reference);
 
-        if(!account.getId().equals(party.getAccountId()))
-            throw new RuntimeException("You cannot update this party");
+        accountCanApplyChanges(account, party);
 
         party = this.repository.save(factory.from(party, request));
+        var guestNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
 
-        return factory.from(party, username);
+        return factory.from(party, username, guestNames);
+    }
+
+    public PartyDto invite(String invite, Integer id, String username) {
+        var account = accountService.findUser(username);
+        var guest = accountService.findUser(invite);
+        var party = findPartyById(id);
+
+        accountCanApplyChanges(account, party);
+        guestService.inviteUserToParty(guest.getId(), party.getId());
+
+        var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+
+        return factory.from(party, account.getUsername(), usernames);
+    }
+
+    public PartyDto unInvite(String invite, Integer id, String username) {
+        var account = accountService.findUser(username);
+        var guest = accountService.findUser(invite);
+        var party = findPartyById(id);
+
+        accountCanApplyChanges(account, party);
+        guestService.unInviteUserFromParty(guest.getId(), party.getId());
+
+        var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+
+        return factory.from(party, account.getUsername(), usernames);
     }
 
     private Party findPartyById(Integer id) {
@@ -67,5 +112,9 @@ public class PartyService {
     private void areDatesValid(OffsetDateTime start, OffsetDateTime end) {
         if(start.isAfter(end))
             throw new RuntimeException("Invalid dates");
+    }
+    private void accountCanApplyChanges(Account account, Party party) {
+        if(!account.getId().equals(party.getAccountId()))
+            throw new RuntimeException("You cannot update this party");
     }
 }

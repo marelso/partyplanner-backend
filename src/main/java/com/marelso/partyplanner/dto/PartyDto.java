@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ public class PartyDto {
     private String name;
     private String description;
     private String createdBy;
+    private List<String> guests;
     private Recurrence recurrence;
     private OffsetDateTime start;
     private OffsetDateTime end;
