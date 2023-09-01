@@ -5,6 +5,9 @@ import com.marelso.partyplanner.repository.PartyGuestsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PartyGuestsService {
@@ -17,5 +20,12 @@ public class PartyGuestsService {
         guest.setAccountId(account);
 
         repository.save(guest);
+    }
+
+    public List<Integer> findGuestsByPartyId(Integer id) {
+        return repository.findAllByPartyId(id)
+                .stream()
+                .map(PartyGuest::getAccountId)
+                .collect(Collectors.toList());
     }
 }
