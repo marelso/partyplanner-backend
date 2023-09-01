@@ -1,6 +1,5 @@
 package com.marelso.partyplanner.service;
 
-import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
 import com.marelso.partyplanner.dto.PartyCreateDto;
 import com.marelso.partyplanner.dto.PartyDto;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
