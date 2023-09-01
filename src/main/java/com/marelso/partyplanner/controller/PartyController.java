@@ -32,7 +32,7 @@ public class PartyController {
     }
 
     @PostMapping
-    public PartyDto create(@RequestHeader("Authorization") String token, @RequestBody PartyCreateDto request) {
+    public PartyDto post(@RequestHeader("Authorization") String token, @RequestBody PartyCreateDto request) {
         var username = authService.authorize(token, PermissionType.USER);
 
         return service.create(request, username);
