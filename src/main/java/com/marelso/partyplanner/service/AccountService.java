@@ -1,7 +1,6 @@
 package com.marelso.partyplanner.service;
 
 import com.marelso.partyplanner.domain.Account;
-import com.marelso.partyplanner.dto.AccountDto;
 import com.marelso.partyplanner.dto.AccountPropertiesDto;
 import com.marelso.partyplanner.dto.CreateAccountDto;
 import com.marelso.partyplanner.dto.factory.AccountFactory;
@@ -22,6 +21,11 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository repository;
     private final AccountFactory factory;
 
+    @Override
+    public Account loadUserByUsername(String username) {
+        return findUser(username);
+    }
+
     public List<Account> findAll(Boolean includeDeleted) {
         return includeDeleted ? this.repository.findAll()
                 : this.repository.findAllByDeletedFalse();
@@ -32,6 +36,10 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException("Nothing found here."));
     }
 
+    public List<String> findUsernames(List<Integer> accountIds) {
+        return repository.findAllById(accountIds).stream().map(Account::getUsername).collect(Collectors.toList());
+    }
+
     public List<Account> validateUsernames(List<String> guests) {
         return guests.stream()
                 .map(this::searchUsername)
@@ -40,27 +48,11 @@ public class AccountService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    private Optional<Account> searchUsername(String username) {
-        return this.repository.findByUsername(username);
-    }
-
-    @Override
-    public Account loadUserByUsername(String username) {
-        return findUser(username);
-    }
-
     public Account create(CreateAccountDto request) throws NoSuchAlgorithmException {
         if(isCredentialsInUse(request.getUsername(), request.getEmail()))
             throw new RuntimeException("Credentials already in use.");
 
         return this.repository.save(factory.from(request));
-    }
-
-    private Boolean isCredentialsInUse(String username, String email) {
-        var isUsernameInUse = this.repository.existsByUsername(username);
-        var isEmailInUse = this.repository.existsByEmail(email);
-
-        return isUsernameInUse && isEmailInUse;
     }
 
     public Account update(Integer id, AccountPropertiesDto request) {
@@ -77,5 +69,16 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public void delete(Integer id) {
         this.repository.applySoftDelete(id);
+    }
+
+    private Optional<Account> searchUsername(String username) {
+        return this.repository.findByUsername(username);
+    }
+
+    private Boolean isCredentialsInUse(String username, String email) {
+        var isUsernameInUse = this.repository.existsByUsername(username);
+        var isEmailInUse = this.repository.existsByEmail(email);
+
+        return isUsernameInUse && isEmailInUse;
     }
 }
