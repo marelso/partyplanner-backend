@@ -1,12 +1,14 @@
 package com.marelso.partyplanner.domain;
 
-import com.marelso.partyplanner.dto.AccountDto;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 
+@Getter
+@Setter
+@Entity(name = "parties")
 public class Party {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +17,6 @@ public class Party {
     private String description;
     private Recurrence recurrence;
     private String bannerURL;
-    private Account createdBy;
     private OffsetDateTime start;
     private OffsetDateTime end;
 }
