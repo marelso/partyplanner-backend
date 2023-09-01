@@ -22,6 +22,10 @@ public class PartyGuestsService {
         repository.save(guest);
     }
 
+    public void unInviteUserFromParty(Integer account, Integer party) {
+        repository.findByPartyAndAccountId(account, party).ifPresent(repository::delete);
+    }
+
     public List<Integer> findGuestsByPartyId(Integer id) {
         return repository.findAllByPartyId(id)
                 .stream()
