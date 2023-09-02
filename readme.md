@@ -19,6 +19,7 @@ For file management we implement s3 buckets, so it is necessary to configure som
 ```sh
 aws.endpointUrl=${aws} aws.accessKey=${access key} aws.secretKey=${secret key}
 ```
+> Note: In order to give access to the bucket, you will need to provide the necessary credentials. For security reasons, we are unable to supply these credentials for you.
 
 ### Reference Documentation
 For further reference, please consider the following sections:
