@@ -11,11 +11,13 @@ Currently, the infrastructure needed is a [PostgresSQL](https://www.postgresql.o
 ```sh
 docker-compose up -d
 ```
-
 on the other side, in order to stop these resources in your environment you should type
-
 ```sh
 docker-compose stop
+```
+For file management we implement s3 buckets, so it is necessary to configure some environment variables:
+```sh
+aws.endpointUrl=${aws} aws.accessKey=${access key} aws.secretKey=${secret key}
 ```
 
 ### Reference Documentation
