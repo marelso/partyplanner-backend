@@ -52,7 +52,7 @@ public class S3Service {
     }
 
     @PostConstruct
-    private void initializeAmazon() {
+    private void constructor() {
         this.s3client = new AmazonS3Client(new BasicAWSCredentials(this.accessKey, this.secretKey));
     }
 
