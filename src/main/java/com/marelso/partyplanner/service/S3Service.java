@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -36,10 +35,25 @@ public class S3Service {
     @Value("${aws.secretKey}")
     private String secretKey;
 
+    public String upload(MultipartFile multipartFile) {
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+            String fileName = generateFileName(multipartFile);
+            uploadFileTos3bucket(fileName, file);
+            file.delete();
+            return endpointUrl + "/" + bucket + "/" + fileName;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void delete(String fileUrl) {
+        s3client.deleteObject(new DeleteObjectRequest(bucket + "/", fileUrl.substring(fileUrl.lastIndexOf("/") + 1)));
+    }
+
     @PostConstruct
     private void initializeAmazon() {
-        AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-        this.s3client = new AmazonS3Client(credentials);
+        this.s3client = new AmazonS3Client(new BasicAWSCredentials(this.accessKey, this.secretKey));
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -55,24 +69,6 @@ public class S3Service {
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
-        s3client.putObject(new PutObjectRequest(bucket, fileName, file)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-    }
-
-    public String upload(MultipartFile multipartFile) {
-        try {
-            File file = convertMultiPartToFile(multipartFile);
-            String fileName = generateFileName(multipartFile);
-            uploadFileTos3bucket(fileName, file);
-            file.delete();
-            return endpointUrl + "/" + bucket + "/" + fileName;
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public void delete(String fileUrl) {
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-        s3client.deleteObject(new DeleteObjectRequest(bucket + "/", fileName));
+        s3client.putObject(new PutObjectRequest(bucket, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
     }
 }
