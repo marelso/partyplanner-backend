@@ -59,11 +59,7 @@ public class AccountService implements UserDetailsService {
         var thereIsAnyAccount = this.repository.findById(id);
         if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
 
-        //TODO create s3service and handle profile image changes (upload/delete)
-        var pp = "";
-        var account = factory.from(thereIsAnyAccount.get(), request, pp);
-
-        return repository.save(account);
+        return repository.save(factory.from(thereIsAnyAccount.get(), request));
     }
 
     @Transactional
