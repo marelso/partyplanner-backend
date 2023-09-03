@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class AccountService implements UserDetailsService {
     private final AccountRepository repository;
     private final AccountFactory factory;
+    private final S3Service s3Service;
 
     @Override
     public Account loadUserByUsername(String username) {
@@ -60,6 +62,20 @@ public class AccountService implements UserDetailsService {
         if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
 
         return repository.save(factory.from(thereIsAnyAccount.get(), request));
+    }
+
+    public Account uploadImage(String username, MultipartFile file) {
+        var thereIsAnyAccount = this.repository.findByUsername(username);
+        if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
+
+        var current = thereIsAnyAccount.get();
+
+        if(current.getProfilePicture() != null && !current.getProfilePicture().isBlank())
+            s3Service.delete(current.getProfilePicture());
+
+        current.setProfilePicture(s3Service.upload(file));
+
+        return current;
     }
 
     @Transactional
