@@ -37,9 +37,11 @@ public class AccountController {
 
     @PutMapping("/{id}")
     public AccountDto put(
-            @PathVariable Integer id,
+            @RequestHeader("Authorization") String token,
             @RequestBody AccountPropertiesDto request) {
-        return this.factory.from(this.service.update(id, request));
+        var account = authService.authorize(token, PermissionType.USER);
+
+        return this.factory.from(this.service.update(account, request));
     }
 
     @DeleteMapping("/{id}")
