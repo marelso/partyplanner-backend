@@ -55,8 +55,8 @@ public class AccountService implements UserDetailsService {
         return this.repository.save(factory.from(request));
     }
 
-    public Account update(Integer id, AccountPropertiesDto request) {
-        var thereIsAnyAccount = this.repository.findById(id);
+    public Account update(String username, AccountPropertiesDto request) {
+        var thereIsAnyAccount = this.repository.findByUsername(username);
         if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
 
         return repository.save(factory.from(thereIsAnyAccount.get(), request));
