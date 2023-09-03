@@ -9,6 +9,7 @@ import com.marelso.partyplanner.service.AccountService;
 import com.marelso.partyplanner.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -44,8 +45,20 @@ public class AccountController {
         return this.factory.from(this.service.update(account, request));
     }
 
+    @PutMapping("/{id}/picture")
+    public AccountDto put(
+            @RequestHeader("Authorization") String token,
+            @RequestBody MultipartFile file) {
+        var account = authService.authorize(token, PermissionType.USER);
+
+        return this.factory.from(this.service.uploadImage(account, file));
+    }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer id) {
+        authService.authorize(token, PermissionType.SUPER);
         this.service.delete(id);
     }
 }
