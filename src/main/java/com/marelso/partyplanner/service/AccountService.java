@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class AccountService implements UserDetailsService {
     private final AccountRepository repository;
     private final AccountFactory factory;
+    private final S3Service s3Service;
 
     @Override
     public Account loadUserByUsername(String username) {
@@ -55,15 +57,25 @@ public class AccountService implements UserDetailsService {
         return this.repository.save(factory.from(request));
     }
 
-    public Account update(Integer id, AccountPropertiesDto request) {
-        var thereIsAnyAccount = this.repository.findById(id);
+    public Account update(String username, AccountPropertiesDto request) {
+        var thereIsAnyAccount = this.repository.findByUsername(username);
         if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
 
-        //TODO create s3service and handle profile image changes (upload/delete)
-        var pp = "";
-        var account = factory.from(thereIsAnyAccount.get(), request, pp);
+        return repository.save(factory.from(thereIsAnyAccount.get(), request));
+    }
 
-        return repository.save(account);
+    public Account uploadImage(String username, MultipartFile file) {
+        var thereIsAnyAccount = this.repository.findByUsername(username);
+        if(thereIsAnyAccount.isEmpty()) throw new RuntimeException("Account not found");
+
+        var current = thereIsAnyAccount.get();
+
+        if(current.getProfilePicture() != null && !current.getProfilePicture().isBlank())
+            s3Service.delete(current.getProfilePicture());
+
+        current.setProfilePicture(s3Service.upload(file));
+
+        return current;
     }
 
     @Transactional
