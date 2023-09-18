@@ -17,9 +17,12 @@ import java.util.stream.Collectors;
 public class GiftService {
     private final GiftRepository repository;
     private final PartyGiftService relation;
+    private final LinkService linkService;
     private final GiftFactory factory;
 
     public GiftDto create(CreationGiftDto request, Integer partyId) {
+        request.setLinks(linkService.create(request.getLinks()));
+
         var entity = repository.save(factory.from(request));
 
         relation.includeInParty(entity.getId(), partyId);
@@ -36,7 +39,19 @@ public class GiftService {
     }
 
     public void delete(Integer giftId) {
-        relation.delete(giftId);
-        repository.deleteById(giftId);
+        findById(giftId).ifPresent((gift -> {
+            linkService.delete(gift.getLinks());
+            relation.delete(gift.getId());
+            repository.deleteById(gift.getId());
+        }));
+    }
+
+    private Gift get(Integer giftId) {
+        return findById(giftId)
+                .orElseThrow(() -> new RuntimeException("Nothing found here."));
+    }
+
+    private Optional<Gift> findById(Integer giftId) {
+        return repository.findById(giftId);
     }
 }
