@@ -24,7 +24,7 @@ public class PartyGiftService {
         entity.ifPresent((p) -> repository.deleteById(p.getId()));
     }
 
-    public void remove(Integer gift) {
+    public void delete(Integer gift) {
         repository.deleteAllByGiftId(gift);
     }
 

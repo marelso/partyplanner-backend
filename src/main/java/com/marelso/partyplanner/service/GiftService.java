@@ -22,8 +22,12 @@ public class GiftService {
         return entity;
     }
 
+    public void removeFromParty(Integer giftId, Integer partyId) {
+        relation.removeFromParty(giftId, partyId);
+    }
+
     public void delete(Integer giftId) {
-        relation.remove(giftId);
+        relation.delete(giftId);
         repository.deleteById(giftId);
     }
 }
