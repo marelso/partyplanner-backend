@@ -1,9 +1,8 @@
 package com.marelso.partyplanner.repository;
 
-import com.marelso.partyplanner.domain.PartyGifts;
+import com.marelso.partyplanner.domain.PartyGift;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface PartyGiftRepository extends JpaRepository<PartyGifts, Integer> {
+public interface PartyGiftRepository extends JpaRepository<PartyGift, Integer> {
+    Boolean existsByPartyIdAndGiftId(Integer partyId, Integer giftId);
 }
