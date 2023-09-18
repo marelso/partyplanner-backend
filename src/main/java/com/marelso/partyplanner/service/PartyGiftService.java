@@ -19,6 +19,10 @@ public class PartyGiftService {
         }
     }
 
+    public void remove(Integer gift) {
+        repository.deleteAllByGiftId(gift);
+    }
+
     private Boolean relationDoNotExists(Integer giftId, Integer partyId) {
         return !repository.existsByPartyIdAndGiftId(partyId, giftId);
     }
