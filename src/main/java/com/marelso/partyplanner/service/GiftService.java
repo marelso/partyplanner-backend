@@ -14,6 +14,6 @@ public class GiftService {
     private final GiftFactory factory;
 
     public Gift create(CreationGiftDto request) {
-        repository.save(factory.from(request));
+        return repository.save(factory.from(request));
     }
 }
