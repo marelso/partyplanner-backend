@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class GiftService {
     }
 
     public List<GiftDto> list(Integer partyId) {
-
+        return null;
     }
 
     public void removeFromParty(Integer giftId, Integer partyId) {
