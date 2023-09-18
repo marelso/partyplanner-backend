@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity(name = "party_gifts")
-public class PartyGifts {
+public class PartyGift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
