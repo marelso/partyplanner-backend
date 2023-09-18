@@ -21,4 +21,9 @@ public class GiftService {
 
         return entity;
     }
+
+    public void delete(Integer giftId) {
+        relation.remove(giftId);
+        repository.deleteById(giftId);
+    }
 }
