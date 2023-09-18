@@ -11,9 +11,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GiftService {
     private final GiftRepository repository;
+    private final PartyGiftService relation;
     private final GiftFactory factory;
 
-    public Gift create(CreationGiftDto request) {
-        return repository.save(factory.from(request));
+    public Gift create(CreationGiftDto request, Integer partyId) {
+        var entity = repository.save(factory.from(request));
+
+        relation.includeInParty(entity.getId(), partyId);
+
+        return entity;
     }
 }
