@@ -19,6 +19,11 @@ public class PartyGiftService {
         }
     }
 
+    public void removeFromParty(Integer gift, Integer party) {
+        var entity = repository.findByPartyIdAndGiftId(party, gift);
+        entity.ifPresent((p) -> repository.deleteById(p.getId()));
+    }
+
     public void remove(Integer gift) {
         repository.deleteAllByGiftId(gift);
     }
