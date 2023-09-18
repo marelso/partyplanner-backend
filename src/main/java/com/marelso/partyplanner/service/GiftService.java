@@ -7,6 +7,7 @@ import com.marelso.partyplanner.dto.factory.GiftFactory;
 import com.marelso.partyplanner.repository.GiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,10 +39,11 @@ public class GiftService {
         relation.removeFromParty(giftId, partyId);
     }
 
+    @Transactional
     public void delete(Integer giftId) {
         findById(giftId).ifPresent((gift -> {
-            linkService.delete(gift.getLinks());
             relation.delete(gift.getId());
+            linkService.delete(gift.getLinks());
             repository.deleteById(gift.getId());
         }));
     }

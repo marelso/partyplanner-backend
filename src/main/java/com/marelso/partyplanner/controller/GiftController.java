@@ -24,4 +24,13 @@ public class GiftController {
         authService.authorize(token, PermissionType.USER);
         return service.create(request, partyId);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer id
+    ) {
+        authService.authorize(token, PermissionType.USER);
+        service.delete(id);
+    }
 }
