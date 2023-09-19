@@ -5,6 +5,8 @@ import com.marelso.partyplanner.repository.PartyGiftRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PartyGiftService {
@@ -22,6 +24,10 @@ public class PartyGiftService {
     public void removeFromParty(Integer gift, Integer party) {
         var entity = repository.findByPartyIdAndGiftId(party, gift);
         entity.ifPresent((p) -> repository.deleteById(p.getId()));
+    }
+
+    public List<Integer> getGiftIdsFromParty(Integer partyId) {
+        return repository.findGiftsIdsByPartyId(partyId);
     }
 
     public void delete(Integer gift) {
