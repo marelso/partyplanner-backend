@@ -36,4 +36,8 @@ public class PartyGuestsService {
                 .map(PartyGuest::getAccountId)
                 .collect(Collectors.toList());
     }
+
+    public List<Integer> findPartiesByGuestId(Integer id) {
+        return repository.findPartyIdByAccountId(id);
+    }
 }

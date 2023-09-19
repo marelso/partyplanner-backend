@@ -45,6 +45,16 @@ public class PartyService {
         );
     }
 
+    public Page<PartyDto> invited(String username, Pageable pageable) {
+        var account = accountService.findUser(username);
+        var parties = guestService.findPartiesByGuestId(account.getId());
+
+        return repository.findByIdIn(parties, pageable).map(party -> {
+            var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
+            return factory.from(party, account.getUsername(), usernames);
+        });
+    }
+
     public PartyDto create(PartyCreateDto request, String username) {
         areDatesValid(request.getStart(), request.getEnd());
 
