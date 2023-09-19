@@ -32,7 +32,11 @@ public class GiftService {
     }
 
     public List<GiftDto> list(Integer partyId) {
-        return null;
+        var partyGiftIds = relation.getGiftIdsFromParty(partyId);
+
+        var entities = repository.findAllById(partyGiftIds);
+
+        return factory.from(entities);
     }
 
     public void removeFromParty(Integer giftId, Integer partyId) {
