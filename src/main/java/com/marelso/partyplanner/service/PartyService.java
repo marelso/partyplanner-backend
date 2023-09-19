@@ -2,13 +2,12 @@ package com.marelso.partyplanner.service;
 
 import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
-import com.marelso.partyplanner.dto.PartyCreateDto;
-import com.marelso.partyplanner.dto.PartyDto;
-import com.marelso.partyplanner.dto.PartyUpdateDto;
+import com.marelso.partyplanner.dto.*;
 import com.marelso.partyplanner.dto.factory.PartyFactory;
 import com.marelso.partyplanner.repository.PartyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -20,7 +19,9 @@ import java.util.stream.Collectors;
 public class PartyService {
     private final AccountService accountService;
     private final PartyGuestsService guestService;
+    private final PartyGiftService relationService;
     private final PartyRepository repository;
+    private final GiftService giftService;
     private final PartyFactory factory;
 
     public List<PartyDto> list(String username) {
@@ -58,6 +59,24 @@ public class PartyService {
         var guestsNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
 
         return factory.from(party, account.getUsername(), guestsNames);
+    }
+
+    public GiftDto insertGift(Integer partyId, String username, CreationGiftDto request) {
+        var account = accountService.findUser(username);
+        var party = findPartyById(partyId);
+
+        accountCanApplyChanges(account, party);
+
+        return giftService.create(request, partyId);
+    }
+
+    public void removeGift(Integer partyId, String username, Integer giftId) {
+        var account = accountService.findUser(username);
+        var party = findPartyById(partyId);
+
+        accountCanApplyChanges(account, party);
+
+        giftService.delete(giftId);
     }
 
     public PartyDto update(Integer reference, PartyUpdateDto request, String username) {
@@ -98,6 +117,19 @@ public class PartyService {
         var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
 
         return factory.from(party, account.getUsername(), usernames);
+    }
+
+    @Transactional
+    public void delete(String username, Integer id) {
+        var account = accountService.findUser(username);
+        var party = findPartyById(id);
+
+        accountCanApplyChanges(account, party);
+
+        var gifts = relationService.getGiftIdsFromParty(id);
+        gifts.forEach(giftService::delete);
+
+        repository.delete(party);
     }
 
     private Party findPartyById(Integer id) {

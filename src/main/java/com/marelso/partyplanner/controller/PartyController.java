@@ -1,9 +1,7 @@
 package com.marelso.partyplanner.controller;
 
 import com.marelso.partyplanner.domain.PermissionType;
-import com.marelso.partyplanner.dto.PartyCreateDto;
-import com.marelso.partyplanner.dto.PartyDto;
-import com.marelso.partyplanner.dto.PartyUpdateDto;
+import com.marelso.partyplanner.dto.*;
 import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.PartyService;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +57,16 @@ public class PartyController {
         return service.unInvite(username, id, account);
     }
 
+    @PostMapping("/{id}/gifts")
+    public GiftDto post(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer id,
+            @RequestBody CreationGiftDto request
+    ) {
+        var account = authService.authorize(token, PermissionType.USER);
+        return service.insertGift(id, account, request);
+    }
+
     @PutMapping("/{id}")
     public PartyDto put(
             @RequestHeader("Authorization") String token,
@@ -67,5 +75,25 @@ public class PartyController {
         var username = authService.authorize(token, PermissionType.USER);
 
         return service.update(id, request, username);
+    }
+
+    @DeleteMapping("/{id}")
+    private void delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer id
+    ) {
+        var username = authService.authorize(token, PermissionType.USER);
+
+        service.delete(username, id);
+    }
+
+    @DeleteMapping("/{id}/gifts")
+    public void remove(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer id,
+            @RequestParam Integer request
+    ) {
+        var account = authService.authorize(token, PermissionType.USER);
+        service.removeGift(id, account, request);
     }
 }
