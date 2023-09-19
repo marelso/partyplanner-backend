@@ -30,6 +30,12 @@ public class PartyController {
         return service.upcoming(username, pageable);
     }
 
+    @GetMapping("/invited")
+    public Page<PartyDto> invited(@RequestHeader("Authorization") String token, @ApiIgnore Pageable pageable) {
+        var username = authService.authorize(token, PermissionType.USER);
+        return service.invited(username, pageable);
+    }
+
     @PostMapping
     public PartyDto post(@RequestHeader("Authorization") String token, @RequestBody PartyCreateDto request) {
         var username = authService.authorize(token, PermissionType.USER);
