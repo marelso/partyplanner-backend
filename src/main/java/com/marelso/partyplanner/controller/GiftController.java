@@ -1,5 +1,6 @@
 package com.marelso.partyplanner.controller;
 
+import com.marelso.partyplanner.domain.Gift;
 import com.marelso.partyplanner.domain.PermissionType;
 import com.marelso.partyplanner.dto.CreationGiftDto;
 import com.marelso.partyplanner.dto.GiftDto;
@@ -7,6 +8,8 @@ import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.GiftService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,15 @@ public class GiftController {
     ) {
         authService.authorize(token, PermissionType.USER);
         return service.create(request, partyId);
+    }
+
+    @GetMapping
+    private List<GiftDto> get(
+            @RequestHeader("Authorization") String token,
+            @RequestParam Integer partyId
+    ) {
+        authService.authorize(token, PermissionType.USER);
+        return service.list(partyId);
     }
 
     @DeleteMapping("/{id}")
