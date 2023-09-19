@@ -5,6 +5,9 @@ import com.marelso.partyplanner.dto.CreationGiftDto;
 import com.marelso.partyplanner.dto.GiftDto;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class GiftFactory {
     public Gift from(CreationGiftDto dto) {
@@ -28,5 +31,9 @@ public class GiftFactory {
         dto.setLinks(entity.getLinks());
 
         return dto;
+    }
+
+    public List<GiftDto> from(List<Gift> entities) {
+        return entities.stream().map(this::from).collect(Collectors.toList());
     }
 }
