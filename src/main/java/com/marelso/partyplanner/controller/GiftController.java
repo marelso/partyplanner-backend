@@ -18,16 +18,6 @@ public class GiftController {
     private final GiftService service;
     private final AuthService authService;
 
-    @PostMapping
-    public GiftDto post(
-            @RequestHeader("Authorization") String token,
-            @RequestParam Integer partyId,
-            @RequestBody CreationGiftDto request
-    ) {
-        authService.authorize(token, PermissionType.USER);
-        return service.create(request, partyId);
-    }
-
     @GetMapping
     private List<GiftDto> get(
             @RequestHeader("Authorization") String token,
