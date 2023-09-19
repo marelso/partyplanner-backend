@@ -60,11 +60,11 @@ public class PartyController {
     @PostMapping("/{id}/gifts")
     public GiftDto post(
             @RequestHeader("Authorization") String token,
-            @PathVariable Integer partyId,
+            @PathVariable Integer id,
             @RequestBody CreationGiftDto request
     ) {
         var account = authService.authorize(token, PermissionType.USER);
-        return service.insertGift(partyId, account, request);
+        return service.insertGift(id, account, request);
     }
 
     @PutMapping("/{id}")
@@ -90,10 +90,10 @@ public class PartyController {
     @DeleteMapping("/{id}/gifts")
     public void remove(
             @RequestHeader("Authorization") String token,
-            @PathVariable Integer partyId,
-            @RequestBody Integer request
+            @PathVariable Integer id,
+            @RequestParam Integer request
     ) {
         var account = authService.authorize(token, PermissionType.USER);
-        service.removeGift(partyId, account, request);
+        service.removeGift(id, account, request);
     }
 }
