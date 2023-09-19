@@ -88,7 +88,7 @@ public class PartyController {
     }
 
     @DeleteMapping("/{id}/gifts")
-    public void post(
+    public void remove(
             @RequestHeader("Authorization") String token,
             @PathVariable Integer partyId,
             @RequestBody Integer request
