@@ -68,4 +68,14 @@ public class PartyController {
 
         return service.update(id, request, username);
     }
+
+    @DeleteMapping("/{id}")
+    private void delete(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer id
+    ) {
+        var username = authService.authorize(token, PermissionType.USER);
+
+        service.delete(username, id);
+    }
 }
