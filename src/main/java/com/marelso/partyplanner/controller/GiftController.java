@@ -1,8 +1,6 @@
 package com.marelso.partyplanner.controller;
 
-import com.marelso.partyplanner.domain.Gift;
 import com.marelso.partyplanner.domain.PermissionType;
-import com.marelso.partyplanner.dto.CreationGiftDto;
 import com.marelso.partyplanner.dto.GiftDto;
 import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.GiftService;
