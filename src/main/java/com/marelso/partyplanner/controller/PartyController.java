@@ -67,16 +67,6 @@ public class PartyController {
         return service.insertGift(partyId, account, request);
     }
 
-    @PostMapping("/{id}/gifts")
-    public void post(
-            @RequestHeader("Authorization") String token,
-            @PathVariable Integer partyId,
-            @RequestBody Integer request
-    ) {
-        var account = authService.authorize(token, PermissionType.USER);
-        service.removeGift(partyId, account, request);
-    }
-
     @PutMapping("/{id}")
     public PartyDto put(
             @RequestHeader("Authorization") String token,
@@ -95,5 +85,15 @@ public class PartyController {
         var username = authService.authorize(token, PermissionType.USER);
 
         service.delete(username, id);
+    }
+
+    @DeleteMapping("/{id}/gifts")
+    public void post(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Integer partyId,
+            @RequestBody Integer request
+    ) {
+        var account = authService.authorize(token, PermissionType.USER);
+        service.removeGift(partyId, account, request);
     }
 }
