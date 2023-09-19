@@ -5,9 +5,10 @@ import com.marelso.partyplanner.dto.*;
 import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.PartyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,17 +18,16 @@ public class PartyController {
     private final PartyService service;
 
     @GetMapping
-    public List<PartyDto> get(@RequestHeader("Authorization") String token) {
+    public Page<PartyDto> get(@RequestHeader("Authorization") String token, @ApiIgnore Pageable pageable) {
         var username = authService.authorize(token, PermissionType.USER);
 
-        return service.list(username);
+        return service.list(username, pageable);
     }
 
     @GetMapping("/upcoming")
-    public List<PartyDto> upcoming(@RequestHeader("Authorization") String token) {
+    public Page<PartyDto> upcoming(@RequestHeader("Authorization") String token, @ApiIgnore Pageable pageable) {
         var username = authService.authorize(token, PermissionType.USER);
-
-        return service.upcoming(username);
+        return service.upcoming(username, pageable);
     }
 
     @PostMapping
