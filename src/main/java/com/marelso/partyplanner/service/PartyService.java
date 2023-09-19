@@ -76,7 +76,7 @@ public class PartyService {
 
         accountCanApplyChanges(account, party);
 
-        giftService.removeFromParty(giftId, partyId);
+        giftService.delete(giftId);
     }
 
     public PartyDto update(Integer reference, PartyUpdateDto request, String username) {
