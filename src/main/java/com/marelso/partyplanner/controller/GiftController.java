@@ -5,9 +5,10 @@ import com.marelso.partyplanner.dto.GiftDto;
 import com.marelso.partyplanner.service.AuthService;
 import com.marelso.partyplanner.service.GiftService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,12 +18,13 @@ public class GiftController {
     private final AuthService authService;
 
     @GetMapping
-    private List<GiftDto> get(
+    private Page<GiftDto> get(
             @RequestHeader("Authorization") String token,
-            @RequestParam Integer partyId
-    ) {
+            @RequestParam Integer partyId,
+            @ApiIgnore Pageable pageable
+            ) {
         authService.authorize(token, PermissionType.USER);
-        return service.list(partyId);
+        return service.list(partyId, pageable);
     }
 
     @DeleteMapping("/{id}")
