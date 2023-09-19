@@ -6,6 +6,8 @@ import com.marelso.partyplanner.dto.*;
 import com.marelso.partyplanner.dto.factory.PartyFactory;
 import com.marelso.partyplanner.repository.PartyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,26 +26,25 @@ public class PartyService {
     private final GiftService giftService;
     private final PartyFactory factory;
 
-    public List<PartyDto> list(String username) {
+    public Page<PartyDto> list(String username, Pageable pageable) {
         var account = accountService.findUser(username);
-        var parties = this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId());
+        var parties = this.repository.findAllByAccountIdOrderByStartDateAsc(account.getId(), pageable);
 
-        return parties.stream().map(party ->  {
+        return parties.map(party ->  {
                     var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
                     return factory.from(party, account.getUsername(), usernames);
-                }
-        ).collect(Collectors.toList());
+                });
     }
 
-    public List<PartyDto> upcoming(String username) {
+    public Page<PartyDto> upcoming(String username, Pageable pageable) {
         var account = accountService.findUser(username);
-        var parties = this.repository.upcomingParties(account.getId());
+        var parties = this.repository.upcomingParties(account.getId(), pageable);
 
-        return parties.stream().map(party ->  {
+        return parties.map(party ->  {
                     var usernames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
                     return factory.from(party, account.getUsername(), usernames);
                 }
-        ).collect(Collectors.toList());
+        );
     }
 
     public PartyDto create(PartyCreateDto request, String username) {
