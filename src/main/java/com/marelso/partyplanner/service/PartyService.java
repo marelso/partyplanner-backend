@@ -2,9 +2,7 @@ package com.marelso.partyplanner.service;
 
 import com.marelso.partyplanner.domain.Account;
 import com.marelso.partyplanner.domain.Party;
-import com.marelso.partyplanner.dto.PartyCreateDto;
-import com.marelso.partyplanner.dto.PartyDto;
-import com.marelso.partyplanner.dto.PartyUpdateDto;
+import com.marelso.partyplanner.dto.*;
 import com.marelso.partyplanner.dto.factory.PartyFactory;
 import com.marelso.partyplanner.repository.PartyRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +59,24 @@ public class PartyService {
         var guestsNames = accountService.findUsernames(guestService.findGuestsByPartyId(party.getId()));
 
         return factory.from(party, account.getUsername(), guestsNames);
+    }
+
+    public GiftDto insertGift(Integer partyId, String username, CreationGiftDto request) {
+        var account = accountService.findUser(username);
+        var party = findPartyById(partyId);
+
+        accountCanApplyChanges(account, party);
+
+        return giftService.create(request, partyId);
+    }
+
+    public void removeGift(Integer partyId, String username, Integer giftId) {
+        var account = accountService.findUser(username);
+        var party = findPartyById(partyId);
+
+        accountCanApplyChanges(account, party);
+
+        giftService.removeFromParty(giftId, partyId);
     }
 
     public PartyDto update(Integer reference, PartyUpdateDto request, String username) {
