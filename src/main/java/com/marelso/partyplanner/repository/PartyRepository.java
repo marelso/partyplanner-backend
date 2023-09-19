@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface PartyRepository extends JpaRepository<Party, Integer> {
     Page<Party> findAllByAccountIdOrderByStartDateAsc(Integer accountId, Pageable pageable);
