@@ -38,6 +38,14 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException("Nothing found here."));
     }
 
+    public Boolean isUsernameAlreadyInUse(String username) {
+        return repository.existsByUsername(username);
+    }
+
+    public Boolean isEmailAlreadyInUse(String email) {
+        return repository.existsByEmail(email);
+    }
+
     public List<String> findUsernames(List<Integer> accountIds) {
         return repository.findAllById(accountIds).stream().map(Account::getUsername).collect(Collectors.toList());
     }

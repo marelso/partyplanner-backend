@@ -31,6 +31,16 @@ public class AccountController {
         return factory.from(service.findAll(includeDeleted));
     }
 
+    @GetMapping("/username")
+    public Boolean verifyUsername(@RequestParam String username) {
+        return service.isUsernameAlreadyInUse(username);
+    }
+
+    @GetMapping("/email")
+    public Boolean verifyEmail(@RequestParam String email) {
+        return service.isEmailAlreadyInUse(email);
+    }
+
     @PostMapping
     public AccountDto post(@RequestBody CreateAccountDto request) throws NoSuchAlgorithmException {
         return factory.from(service.create(request));
